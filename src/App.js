@@ -1,54 +1,46 @@
 import './App.css';
 import { useState } from 'react';
 
-const courseList = [
-  {
-    name: 'javascript',
-    id: 1,
-  },
-  {
-    name: 'php',
-    id: 2,
-  },
-  {
-    name: 'react',
-    id: 3,
-  },
-];
-
 function App() {
-  const [checked, setChecked] = useState([]);
-  console.log('🚀 ~ checked', checked);
+  const [job, setJob] = useState('');
+  const [jobs, setJobs] = useState(() => {
+    const storageJobs = JSON.parse(localStorage.getItem('jobs')) ?? [];
+    console.log(storageJobs);
+    return storageJobs;
+  });
 
   const handleSubmit = () => {
-    console.log({ id: checked });
+    setJobs((prev) => {
+      const newJob = [...prev, job];
+
+      const jsonJobs = JSON.stringify(newJob);
+
+      localStorage.setItem('jobs', jsonJobs);
+
+      return newJob;
+    });
+    setJob('');
   };
 
-  const handleCheck = (id) => {
-    setChecked((prev) => {
-      const isChecked = checked.includes(id);
-
-      if (isChecked) {
-        return checked.filter((item) => item !== id);
-      } else {
-        return [...prev, id];
-      }
-    });
+  const handleRemove = (index) => {
+    const newTodo = jobs.filter((todo, indexTodo) => index !== indexTodo);
+    localStorage.setItem('jobs', JSON.stringify(newTodo));
+    setJobs(newTodo);
   };
 
   return (
     <div style={{ padding: '32px' }}>
-      {courseList.map((course) => (
-        <div key={course.id}>
-          <input
-            type="checkbox"
-            checked={checked.includes(course.id)}
-            onChange={() => handleCheck(course.id)}
-          />
-          {course.name}
-        </div>
-      ))}
-      <button onClick={handleSubmit}>Resgister</button>
+      <input value={job} onChange={(e) => setJob(e.target.value)} />
+      <button onClick={handleSubmit}>Add</button>
+
+      <ul>
+        {jobs.map((job, index) => (
+          <li key={index}>
+            {job}
+            <span onClick={() => handleRemove(index)}>&times;</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
