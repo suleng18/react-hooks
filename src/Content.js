@@ -13,73 +13,23 @@ Lưu ý chung cho cả 3:
 - Cleanup function luôn được gọi lại trước khi component unmounted
  */
 
-const tabs = ['posts', 'comments', 'albums'];
 function Content(props) {
-  const [title, setTitle] = useState('');
-  const [posts, setPosts] = useState([]);
-  const [type, setType] = useState('posts');
-  const [showGoToTop, setShowGoToTop] = useState(false);
+  const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    fetch(`https://jsonplaceholder.typicode.com/${type}`)
-      .then((res) => res.json())
-      .then((postList) => {
-        setPosts(postList);
-      });
-  }, [type]);
-
-  useEffect(() => {
-    const handdleScroll = () => {
-      if (window.scrollY >= 200) {
-        setShowGoToTop(true);
-      } else {
-        setShowGoToTop(false);
-      }
-      // setShowGoToTop(window.scrollY >= 200);
+    const handleResize = () => {
+      setWidth(window.innerWidth);
     };
-
-    window.addEventListener('scroll', handdleScroll);
+    window.addEventListener('resize', handleResize);
 
     return () => {
-      window.removeEventListener('scroll', handdleScroll);
+      window.removeEventListener('resize', handleResize);
     };
   }, []);
 
   return (
     <div>
-      {tabs.map((tab) => (
-        <button
-          onClick={() => setType(tab)}
-          key={tab}
-          style={
-            type === tab
-              ? {
-                  color: '#fff',
-                  backgroundColor: '#333',
-                }
-              : {}
-          }
-        >
-          {tab}
-        </button>
-      ))}
-      <input value={title} onChange={(e) => setTitle(e.target.value)} />
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>{post.title ?? post.name}</li>
-        ))}
-      </ul>
-      {showGoToTop && (
-        <button
-          style={{
-            position: 'fixed',
-            right: 20,
-            bottom: 20,
-          }}
-        >
-          Go to Top
-        </button>
-      )}
+      <h1>{width}</h1>
     </div>
   );
 }
