@@ -14,51 +14,18 @@ Lưu ý chung cho cả 3:
 3. Cleanup function luôn được gọi trước khi callback được gọi ( trừ lần mounted )
  */
 
-const lessons = [
-  {
-    id: 1,
-    name: 'React cho nguoi moi bat dau',
-  },
-  {
-    id: 2,
-    name: 'CSS cho nguoi moi bat dau',
-  },
-  {
-    id: 3,
-    name: 'JAVA cho nguoi moi bat dau',
-  },
-];
-
 function Content(props) {
-  const [lessonId, setLessonId] = useState(1);
+  const [count, setCount] = useState(0);
+  const handleRun = () => setCount(count + 1);
 
   useEffect(() => {
-    const handleComent = ({ detail }) => {
-      console.log(detail);
-    };
-
-    window.addEventListener(`lesson-${lessonId}`, handleComent);
-
-    return () => {
-      window.removeEventListener(`lesson-${lessonId}`, handleComent);
-    };
-  }, [lessonId]);
+    if (count > 3) setCount(0);
+  }, [count]);
 
   return (
     <div>
-      <ul>
-        {lessons.map((lesson) => (
-          <li
-            key={lesson.id}
-            style={{
-              color: lessonId === lesson.id ? 'red' : 'black',
-            }}
-            onClick={() => setLessonId(lesson.id)}
-          >
-            {lesson.name}
-          </li>
-        ))}
-      </ul>
+      <h1>{count}</h1>
+      <button onClick={handleRun}>Run</button>
     </div>
   );
 }
