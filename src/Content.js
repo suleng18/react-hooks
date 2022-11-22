@@ -14,24 +14,51 @@ Lưu ý chung cho cả 3:
 3. Cleanup function luôn được gọi trước khi callback được gọi ( trừ lần mounted )
  */
 
+const lessons = [
+  {
+    id: 1,
+    name: 'React cho nguoi moi bat dau',
+  },
+  {
+    id: 2,
+    name: 'CSS cho nguoi moi bat dau',
+  },
+  {
+    id: 3,
+    name: 'JAVA cho nguoi moi bat dau',
+  },
+];
+
 function Content(props) {
-  const [avatar, setAvatar] = useState();
+  const [lessonId, setLessonId] = useState(1);
 
   useEffect(() => {
-    return () => {
-      URL.revokeObjectURL(avatar?.preview);
+    const handleComent = ({ detail }) => {
+      console.log(detail);
     };
-  }, [avatar]);
 
-  const handlePreviewAvatar = (e) => {
-    const file = e.target.files['0'];
-    file.preview = URL.createObjectURL(file);
-    setAvatar(file);
-  };
+    window.addEventListener(`lesson-${lessonId}`, handleComent);
+
+    return () => {
+      window.removeEventListener(`lesson-${lessonId}`, handleComent);
+    };
+  }, [lessonId]);
+
   return (
     <div>
-      <input type="file" onChange={handlePreviewAvatar} />
-      {avatar && <img src={avatar.preview} alt="{}" width="80%" />}
+      <ul>
+        {lessons.map((lesson) => (
+          <li
+            key={lesson.id}
+            style={{
+              color: lessonId === lesson.id ? 'red' : 'black',
+            }}
+            onClick={() => setLessonId(lesson.id)}
+          >
+            {lesson.name}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
