@@ -9,22 +9,29 @@ Content.propTypes = {};
 3.useEffect(callback,[desps]) : Callback sẽ được gọi lại mỗi khi desps thay đổi
 -----------------
 Lưu ý chung cho cả 3:
-- Callback luôn được gọi sau khi component mounted
-- Cleanup function luôn được gọi lại trước khi component unmounted
+1. Callback luôn được gọi sau khi component mounted
+2. Cleanup function luôn được gọi trước khi component unmounted
+3. Cleanup function luôn được gọi trước khi callback được gọi ( trừ lần mounted )
  */
 
 function Content(props) {
-  const [countdown, setCountdown] = useState(180);
+  const [avatar, setAvatar] = useState();
 
   useEffect(() => {
-    setInterval(() => {
-      setCountdown((prev) => prev - 1);
-    }, 1000);
-  }, []);
+    return () => {
+      URL.revokeObjectURL(avatar?.preview);
+    };
+  }, [avatar]);
 
+  const handlePreviewAvatar = (e) => {
+    const file = e.target.files['0'];
+    file.preview = URL.createObjectURL(file);
+    setAvatar(file);
+  };
   return (
     <div>
-      <h1>{countdown}</h1>
+      <input type="file" onChange={handlePreviewAvatar} />
+      {avatar && <img src={avatar.preview} alt="{}" width="80%" />}
     </div>
   );
 }
