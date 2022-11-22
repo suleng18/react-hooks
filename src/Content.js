@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import Paragraph from './Paragraph';
 
 Content.propTypes = {};
 /**
@@ -14,18 +15,10 @@ Lưu ý chung cho cả 3:
 3. Cleanup function luôn được gọi trước khi callback được gọi ( trừ lần mounted )
  */
 
-function Content(props) {
-  const [count, setCount] = useState(0);
-  const handleRun = () => setCount(count + 1);
-
-  useEffect(() => {
-    if (count > 3) setCount(0);
-  }, [count]);
-
+function Content() {
   return (
     <div>
-      <h1>{count}</h1>
-      <button onClick={handleRun}>Run</button>
+      <Paragraph />
     </div>
   );
 }
