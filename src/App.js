@@ -1,7 +1,6 @@
-import { useContext } from 'react';
-import './App.css';
-import Content from './Content';
-import { ThemContext } from './ThemeContext';
+import { useEffect, useRef } from 'react';
+import { actions, useStore } from './store';
+import Video from './Video';
 
 // Context
 // 1. Create context
@@ -9,11 +8,20 @@ import { ThemContext } from './ThemeContext';
 // 3. Consumer
 
 function App() {
-  const context = useContext(ThemContext);
+  const videoRef = useRef();
+
+  const handlePlay = () => {
+    videoRef.current.play();
+  };
+  const handlePause = () => {
+    videoRef.current.pause();
+  };
+
   return (
     <div style={{ padding: '32px' }}>
-      <button onClick={context.toggleTheme}>Toggle theme</button>
-      <Content />
+      <Video ref={videoRef} />
+      <button onClick={handlePlay}>Play</button>
+      <button onClick={handlePause}>Pause</button>
     </div>
   );
 }

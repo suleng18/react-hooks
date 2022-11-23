@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ThemContext, ThemProvider } from './ThemeContext';
+import { StoreProvider } from './store';
 
 // function emitComment(id) {
 //   setInterval(() => {
@@ -21,9 +22,9 @@ import { ThemContext, ThemProvider } from './ThemeContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   // <React.StrictMode>
-  <ThemProvider>
+  <StoreProvider>
     <App />,
-  </ThemProvider>,
+  </StoreProvider>,
   // </React.StrictMode>
 );
 
